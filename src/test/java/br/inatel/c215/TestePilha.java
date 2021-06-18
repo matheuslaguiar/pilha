@@ -4,28 +4,54 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import br.inatel.c215.pilha.Pilha;
+import br.inatel.c215.pilha.exception.PilhaVaziaException;
 
 public class TestePilha {
-
+    private Pilha<Integer> pilha;
+    
+    @Before //Fixture
+	public void init() {
+		pilha = new Pilha<>();
+	}
+	
+	@Test
+	public void testePilhaEstaVazia() {
+		boolean resultado = pilha.pilhaVazia();
+		assertTrue(resultado);
+	}
+	
+	@Test
+	public void testePilhaPush2Elementos() {
+		pilha.push(13);
+		pilha.push(23);
+		assertFalse(pilha.pilhaVazia());
+		assertEquals(2, pilha.getQtdElementos());
+		
+		int topo = pilha.mostraTopo();
+		assertEquals(23,topo);
+		
+	}
     @Test
-    public void testePilhaEstaVazia(){
-        Pilha <Integer> pilha = new Pilha<>();
-        boolean resultado = pilha.pilhaVazia();
-
-        assertTrue(resultado);
-    }
-
-    @Test
-    public void testePush2Elementos(){
-        Pilha <Integer> pilha = new Pilha<>();
+    public void testePilhaPop(){
         pilha.push(13);
         pilha.push(23);
-        assertFalse(pilha.pilhaVazia());
-        assertEquals(2, pilha.getQtdElementos());
+        pilha.push(33);
+        int topo = pilha.mostraTopo();
+        assertEquals(3, pilha.getQtdElementos());
+        assertEquals(33, topo);
         
+        topo = pilha.pop();
+        assertEquals(33, topo);
+        assertEquals(2, pilha.getQtdElementos());
+    }
+
+    @Test(expected = PilhaVaziaException.class)
+    public void popPilhaVazia(){
+        pilha.pop();
     }
 }
 
